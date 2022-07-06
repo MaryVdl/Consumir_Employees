@@ -21,6 +21,7 @@ def crearLista():
         if line != "":
             lista.append(line.rstrip("\n"))
     print(lista)
+    return lista
 
 def datas(lista):
     try:
@@ -35,14 +36,19 @@ def datas(lista):
                 name_airport = pos[4]
                 
                 data_airport = add_airport(name_airport)
-                id_airport = data_airport["id"]                
+                id_airport = data_airport["id"]  
+                
+                nameLan = name_language[:5]
+                data_language =  add_language("LAN" + nameLan, name_language) 
+                id_language = data_language["id"]         
                 
                 nameCoun = name_country[:5]
-                country = add_country("COU" + nameCoun.upper(), name_country, id_airport)
-                create_employee(surname, firstname, )
+                data_country = add_country("COU" + nameCoun, name_country, id_airport)
+                id_country = data_country["id"]
                 
+                create_employee(surname, firstname, id_country, id_language)                
     except:
-        print("Error")
+        print("ERROR en datas")
 
 def add_country(code, name, id_airport):
     try:
@@ -51,7 +57,8 @@ def add_country(code, name, id_airport):
         todo = {"code": code, "name": name, "id_airport": id_airport}
         response = requests.post(url, json=todo)
         res = response.json()
-        print(res)
+        print("add_country\n" + str(res))
+        return res
     except:
         print("Error en add_Country")
 
@@ -62,11 +69,22 @@ def add_airport(name):
         todo = {"name": name}
         response = requests.post(url, json=todo)
         res = response.json()
-        print(res)
+        print("add_airport\n" + str(res))
         return res
     except:
         print("ERROR en add_airport")
     
+def add_language(code, name):
+    try:
+        url = "http://localhost:8080/languages/languagesadd"
+        requests.post(url)
+        todo = {"code": code, "name": name}
+        response = requests.post(url, json=todo)
+        res = response.json()
+        print("add_language\n" + str(res))
+        return res
+    except:
+        print("ERROR en add_language")
         
     
 
@@ -77,7 +95,7 @@ def create_employee(surname, firstname, name_country, name_language):
         todo = {"surname" : surname, "firstname": firstname, "name_country": name_country, "name_language": name_language}
         response = requests.post(url, json=todo)
         res = response.json()
-        print("Se agregaron los datos a la tabla employees\n" + res)
+        print("Se agregaron los datos a la tabla employees\n" + str(res))
     except:
         print("Error, no se pudieron guardar los datos")
         
