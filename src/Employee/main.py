@@ -20,7 +20,7 @@ def menu():
     salir = False
     opcion = 0
     while not salir:
-        print("Menu de opciones\n")
+        print("\n -----------Menu de opciones-----------\n")
         print ("1. Add Datos")
         print ("2. Salir \n")
         opcion = opcionEjercicio()
